@@ -1,0 +1,361 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+
+\documentclass[a4paper]{article}
+\usepackage[12pt]{extsizes}
+\usepackage{amsmath,amsthm,amssymb}
+\usepackage[hidelinks]{hyperref} 
+\usepackage[warn]{mathtext}
+\usepackage[T1,T2A]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[english,russian]{babel}
+\usepackage{tocloft}
+\linespread{1.5}
+\usepackage{indentfirst}
+\usepackage{setspace}
+%\полуторный интервал
+\onehalfspacing
+
+\newcommand{\RomanNumeralCaps}[1]
+    {\MakeUppercase{\romannumeral #1}}
+
+\usepackage{amssymb}
+
+\usepackage{graphicx, float}
+\graphicspath{{pictures/}}
+\DeclareGraphicsExtensions{.pdf,.png,.jpg}
+\usepackage[left=25mm,right=1cm,
+    top=2cm,bottom=20mm,bindingoffset=0cm]{geometry}
+\renewcommand{\cftsecleader}{\cftdotfill{\cftdotsep}}
+
+
+\addto\captionsrussian{\renewcommand{\contentsname}{СОДЕРЖАНИЕ}}
+\addto\captionsrussian{\renewcommand{\listtablename}{СПИСОК ТАБЛИЦ}}
+
+\usepackage{fancyhdr}
+\usepackage[nottoc]{tocbibind}
+
+\fancypagestyle{plain}{
+\fancyhf{}
+\renewcommand{\headrulewidth}{0pt}
+\fancyhead[R]{\thepage}
+}
+
+\usepackage{blindtext}
+\pagestyle{myheadings}
+\usepackage{hyperref}
+
+\begin{document}
+\begin{titlepage}
+  \begin{center}
+    \large
+    Санкт-Петербургский политехнический университет Петра Великого
+    
+    Физико Механический институт
+
+    \textbf{Высшая школа прикладной математики и вычислительной физики}
+    \vfill
+    \textsc{\textbf{\large{Отчёт по лабораторной работе №2}}}\\[5mm]
+     по дисциплине\\ <<Математическая статистика>>\\
+\end{center}
+
+\vfill
+
+\begin{tabular}{l p{140} l}
+Выполнила студентка \\группы 5030102/90101 && Кузин Иван Никитович \\
+\\
+Проверил\\Доцент, к.ф.-м.н.& \hspace{0pt} &   Баженов Александр Николаевич \\\\
+\end{tabular}
+
+\hfill \break
+\hfill \break
+\begin{center} Санкт-Петербург \\2022 \end{center}
+\thispagestyle{empty}
+\end{titlepage}
+\newpage
+\newpage
+\begin{center}
+    \setcounter{page}{2}
+    \tableofcontents
+\end{center}
+\newpage
+\begin{center}
+    \setcounter{page}{3}
+    \listoftables
+\end{center}
+
+\newpage
+\section {Постановка задачи}
+\noindent Сгенерировать выборки размером 10, 100 и 1000 элементов.
+Для каждой выборки вычислить следующие статистические характеристики положения данных: $\overline{x}, med x, z_R, z_Q, z_{tr}.$ Повторить такие вычисления 1000 раз для каждой выборки и найти среднее характеристик положения и их квадратов:
+\begin{equation}
+	E(z) = \overline{z}
+\end{equation}
+Вычислить оценку дисперсии по формуле:
+\begin{equation}
+	D(z) = \overline{z^2} - \overline{z}^2
+\end{equation}
+Представить полученные данные в виде таблиц.
+
+\section {Теория}
+\subsection{Распределения}
+	\begin{itemize}
+		\item Нормальное распределение \begin{equation}
+										  N(x, 0, 1) = \frac{1}{\sqrt{2\pi}}e^{\frac{-x^2}{2}} \label{norm}
+									   \end{equation}
+		\item Распределение Коши \begin{equation}
+									C(x, 0, 1) = \frac{1}{\pi}\frac{1}{x^2+1} \label{koshi}
+								 \end{equation}
+		\item Распределение Лапласа \begin{equation}
+									   L(x, 0, \frac{1}{\sqrt{2}}) = \frac{1}{\sqrt{2}}e^{-\sqrt{2}|x|} \label{laplace}
+									\end{equation}
+		\item Распределение Пуассона \begin{equation}
+										P(k, 10) = \frac{10^k}{k!}e^{-10}\label{puasson}
+									 \end{equation}
+		\item Равномерное распределение \begin{equation}
+				U(x, -\sqrt{3}, \sqrt{3}) =
+				\begin{cases}
+					\frac{1}{2\sqrt{3}} &\text{$при |x|\leq \sqrt{3}$}\\
+					0 &\text{$при |x|>\sqrt{3}$}
+				\end{cases}
+				\label{uni}
+			\end{equation}
+	\end{itemize}
+
+\subsection{Вариационный ряд}
+	\noindent Вариационным рядом называется последовательность элементов выборки, расположенных в неубывающем порядке. Одинаковые элементы повторяются.
+	Запись вариационного ряда: $x_{(1)}, x_{(2)}, \ldots, x_{(n)}$.
+	Элементы вариационного ряда $x_{(i)} (i = 1, 2, \ldots, n)$ называются порядковыми статистиками.
+
+	\subsection{Выборочные числовые характеристики}
+	\noindent С помощью выборки образуются её числовые характеристики. Это числовые характеристики дискретной случайной величины $X^{*}$, принимающей выборочные значения $x_{(1)}, x_{(2)}, \ldots, x_{(n)}$.
+
+	\subsubsection{Характеристики положения}
+	\begin{itemize}
+		\item Выборочное среднее \begin{equation}
+									 \overline{x} = \frac{1}{n}\sum_{i=1}^{n}{x_i}
+								\end{equation}
+		\item Выборочная медиана \begin{equation}
+								 	med x = \begin{cases}
+											 	x_{(l+1)} &\text{$ n=2l+1$}\\
+											 	\frac{x_{(l)} + x_{(l+1)}}{2} &\text{$ n=2l$}
+								 			\end{cases}
+								 \end{equation}
+		\item Полусумма экстремальных выборочных элементов \begin{equation}
+														       z_R = \frac{x_{(1)} + x_{(n)}}{2}
+														   \end{equation}
+		\item Полусумма квартилей \newline Выборочная квартиль $z_p$ порядка $p$ определяется формулой \begin{equation}
+				 	z_p = \begin{cases}
+		             	  	x_{([np]+1)} &\text{$np - $дробное}\\
+		      			    x_{(np)}&\text{$np - $целое}
+		      			  \end{cases}
+				 \end{equation}
+				 Полусумма квартилей \begin{equation}
+				 					 	z_Q = \frac{z_{1/4} + z_{3/4}}{2}
+				 					 \end{equation}
+		\item Усечённое среднее\begin{equation}
+							   		z_{tr} = \frac{1}{n-2r}\sum_{i=r+1}^{n-r}{x_{(i)}}, r\approx\frac{n}{4}	   	\end{equation}
+	\end{itemize}
+
+	\subsubsection{Характеристики рассеяния}
+	Выборочная дисперсия
+	\begin{equation}
+		D = \frac{1}{n}\sum_{i=1}^{n}{(x_i-\overline{x})^2}
+	\end{equation}
+
+\section {Программная реализация}
+\noindent Лабораторная работа выполнена на языке Python вресии 3.7 в среде разработки JupyterLab. Использовались дополнительные библиотеки:\\ \newline
+1. scipy\newline
+2. numpy\newline
+\\
+В приложении находится ссылка на GitHub репозиторий с исходныи кодом.
+
+\section {Результаты}
+\subsection{Характеристики положения и рассеяния}
+\noindent Как было проведено округление:\\
+В оценке $x=E  \pm D$ вариации подлежит первая цифра после точки. В данном случае $x=0.0 \pm 0.1k$,  $k$ - зависит от доверительной вероятности и вида распределения (рассматривается в дальнейшем цикле лабораторных работ). Округление сделано для  $k=1$.
+	\begin{table}[H]
+		\centering
+		\begin{tabular}[t]{|l|r|r|r|r|r|}
+			\hline
+			Characteristic   &      Mean &    Median &       $z_R$ &      $z_Q$ &      $z_{tr}$ \\
+			\hline
+			Normal E(z) 10   & -0.017468& -0.019852& -0.025488& 0.300647& 0.260236\\
+			\hline
+			Normal D(z) 10   & 0.099305& 0.145161& 0.182558& 0.119238& 0.11468\\
+			\hline
+			E(z) \pm \sqrt{D(z)} &[0.332595;&[0.400852;&[0.452756;&[0.044662;&[0.078408;\\&0.297659]&0.361148]&0.40178]&0.645956]&0.59888]\\
+			\hline
+			\widehat{E}(z) & 0.0 & 0.0 & 0.0 & 0.0 & 0.0\\
+			\hline
+			Normal E(z) 100  & -0.000866& 0.002153& -0.004746& 0.013516& 0.027086\\
+			\hline
+			Normal D(z) 100  & 0.010386& 0.01633& 0.085266& 0.012678& 0.012396\\
+			\hline
+			E(z) \pm \sqrt{D(z)} &[0.102778;&[0.125636;&[0.296749;&[0.099081;&[0.084251;\\&0.101046]&0.129942]&0.287257]&0.126113]&0.138423] \\
+			\hline
+			\widehat{E}(z) & 0.0 & 0.0 & 0.0 & 0.0 & 0.0\\
+			\hline
+			Normal E(z) 1000 & 0.000153& 8.9e-05& 0.007519& 0.001509& 0.002836\\
+			\hline
+			Normal D(z) 1000 & 0.000981& 0.001642& 0.059635& 0.001228& 0.001195\\
+			\hline
+	    	E(z) \pm \sqrt{D(z)} &[0.031168;&[0.040433;&[0.236684;&[0.033534;&[0.031733;\\&0.031474]&0.040611]&0.251722]&0.036552]&0.037405] \\
+			\hline
+			\widehat{E}(z) & 0.0 & 0.0 & 0.0 & 0.0 & 0.0\\
+			\hline
+		\end{tabular}
+		\caption{Нормальное распределение \eqref{norm}}
+		\label{tab:normal}
+	\end{table}
+	\begin{table}[H]
+	\centering
+		\begin{tabular}[t]{|l|r|r|r|r|r|}
+			\hline
+			Characteristic   &        Mean &    Median &            $z_R$ &       $z_Q$ &      $z_{tr}$ \\
+			\hline
+			Cauchy E(z) 10  & 0.562654& -0.006675& 2.898445& 1.104381& 0.671502\\
+			\hline
+			Cauchy D(z) 10  & 523.363485& 0.295683& 12824.001857& 4.591925& 1.076515 \\
+			\hline
+			E(z) \pm \sqrt{D(z)} & [22.314485;&[0.550442;&[110.344665;&[1.038497;&[0.36605;\\&23.439793]&0.537092]&116.141555]&3.247259]&1.709054] \\
+		 	\hline
+			\widehat{E}(z) & - & 0 & - & - & -\\
+			\hline
+			Cauchy E(z) 100  & -0.7079& -0.001573& -34.396555& 0.03319& 0.038699 \\
+			\hline
+			Cauchy D(z) 100  & 398.608006& 0.027015& 945555.067& 0.057985& 0.027952  \\
+			\hline
+		    E(z) \pm \sqrt{D(z)} &[20.67307;&[0.165935;&[1006.793114;&[0.207611;&[0.12849;\\&19.25727]&0.162789]&938.000004]&0.273991]&0.205888] \\
+			\hline
+			\widehat{E}(z) & - & 0 & - & - & -\\
+			\hline
+			Cauchy E(z) 1000 & -0.510318& 0.000322& -260.66918& 0.004265& 0.003941 \\
+			\hline
+			Cauchy D(z) 1000 & 290.388668& 0.002172& 69909833.801229& 0.00484& 0.002387 \\
+			\hline
+			E(z) \pm \sqrt{D(z)} &[17.551112;&[0.046283;&[8621.879248;&[0.065305;&[0.044916;\\&16.530476]&0.046927]&8100.540888]&0.073835]&0.052798]\\
+			\hline
+			\widehat{E}(z) & - & 0 & - & - & -\\
+			\hline
+		\end{tabular}
+	\caption{Распределение Коши \eqref{koshi}}
+	\label{tab:cauchy}
+	\end{table}
+
+\begin{table}[H]
+	\centering
+		\begin{tabular}[t]{|l|r|r|r|r|r|}
+			\hline
+			Characteristic    &      Mean &    Median &       $z_R$ &       $z_Q$ &      $z_{tr}$ \\
+			\hline
+			Laplace E(z) 10  & -0.006405& -0.006188& -0.005512& 0.293618& 0.229066 \\
+			\hline
+			Laplace D(z) 10 & 0.010247& 0.006208& 0.425481& 0.010082& 0.006497\\
+			\hline
+			E(z) \pm \sqrt{D(z)} &[0.031154;&[0.022723;&[0.651449;&[0.029889;&[0.022585;\\&0.030002]&0.021909]&0.626013]&0.032657]&0.025539] \\
+			\hline
+			\widehat{E}(z)  & 0 & 0 & 0& 0 & 0\\
+			\hline
+			Laplace E(z) 100  & 0.002803& 0.001905& 0.023725& 0.017159& 0.021071 \\
+			\hline
+			Laplace D(z) 100  &  0.057048 & 0.041891 & 0.492694 & 0.492542 & 0.095815 \\
+			\hline
+			E(z) \pm \sqrt{D(z)} & [-0.226576; & [-0.199293; & [-0.680069; & [-0.679985; & [-0.294498; \\
+			&  0.251118] &  0.210051] & 0.723773] & 0.723641] & 0.324580] \\
+			\hline
+			\widehat{E}(z)  & 0 & 0 & 0 & 0 & 0\\
+			\hline
+			Laplace E(z) 1000 & -0.000576& -0.000407& -0.012718& 0.001384& 0.001477 \\
+			\hline
+			Laplace D(z) 1000 & 0.000935& 0.000498& 0.407977& 0.000978& 0.000579 \\
+			\hline
+			E(z) \pm \sqrt{D(z)}&[0.022723;&[0.651449;&[0.029889;&[0.022585;& [0.022652;\\&0.021909]&0.626013]&0.032657]&0.025539]&0.023563] \\
+			\hline
+			\widehat{E}(z)  & 0 & 0 & 0 & 0 & 0\\
+			\hline
+		\end{tabular}
+		\caption{Распределение Лапласа \eqref{laplace}}
+		\label{tab:laplace}
+	\end{table}
+
+\begin{table}[H]
+		\centering
+		\begin{tabular}[t]{|l|r|r|r|r|r|}
+			\hline
+			Characteristic    &      Mean &   Median &       $z_R$ &      $z_Q$ &     $z_{tr}$ \\
+			\hline
+			Poisson E(z) 10   & 10.0015& 9.87& 10.265& 10.9455& 10.786167     \\
+			\hline
+			Poisson D(z) 10   & 1.101808& 1.5811& 1.936775& 1.46278& 1.362525  \\
+			\hline
+			E(z) \pm \sqrt{D(z)} &[0.031154;&[0.022723;&[0.651449;&[0.029889;&[0.022585;\\&0.030002]&0.021909]&0.626013]&0.032657]&0.025539] \\
+			\hline
+			\widehat{E}(z) & 10^{+1}_{-1} & 10^{+1}_{-1} & 10^{+2}_{-2} & 10^{+2}_{-2} & 10^{+1}_{-1}\\
+			\hline
+			Poisson E(z) 100  & 9.9932& 9.844& 10.9475& 9.959& 9.93526  \\
+			\hline
+			Poisson D(z) 100  & 0.10332& 0.204664& 0.997494& 0.159819& 0.122566 \\
+			\hline
+			E(z) \pm \sqrt{D(z)}&[9.671766;&[9.391602;&[9.948754;&[9.559226;&[9.585166;\\&10.314634]&10.296398]&11.946246]&10.358774]&10.285354]\\
+			\hline
+			\widehat{E}(z)  & 10^{+1}_{-1} & 10^{+1}_{-1} & 10^{+2}_{-2} & 10^{+2}_{-2} & 10^{+1}_{-1}\\
+			\hline
+			Poisson E(z) 1000 & 10.000822& 9.997& 11.671& 9.9955& 9.86806\\
+			\hline
+			Poisson D(z) 1000 & 0.00993& 0.002991& 0.746759& 0.00223& 0.01131 \\
+			\hline
+			E(z) \pm \sqrt{D(z)} &[9.901173;&[9.94231;&[10.806848;&[9.948277;&[9.761712;\\&10.100471]&10.05169]&12.535152]&10.042723]&9.974408] \\
+			\hline
+			\widehat{E}(z) & 10^{+1}_{-1} & 10^{+1}_{-1} & 10^{+2}_{-2} & 10^{+2}_{-2} & 10^{+1}_{-1}\\
+			\hline
+		\end{tabular}
+
+		\caption{Распределение Пуассона \eqref{puasson}}
+		\label{tab:poisson}
+	\end{table}
+
+\begin{table}[H]
+		\centering
+		\begin{tabular}[t]{|l|r|r|r|r|r|}
+			\hline
+			Characteristic    &      Mean &    Median &       $z_{R}$ &       $z_Q$ &      $z_{tr}$ \\
+			\hline
+			Uniform E(z) 10   & -0.007779& -0.011541& -0.00537& 0.316201& 0.304339\\
+			\hline
+			Uniform D(z) 10   & 0.104723& 0.233967& 0.047982& 0.130148& 0.159694 \\
+			\hline
+			E(z) \pm \sqrt{D(z)} &[0.331388;&[0.495242;&[0.224418;&[0.044559;&[0.095278;\\&0.31583]&0.47216]&0.213678]&0.676961]&0.703956] \\
+			\hline
+			\widehat{E}(z)  & 0.0 & 0.0 & 0.0 & 0.0 & 0.0\\
+			\hline
+			Uniform E(z) 100 & -0.003973& -0.004643& 0.001269& 0.012524& 0.02923 \\
+			\hline
+			Uniform D(z) 100  & 0.009763& 0.029286& 0.000551& 0.014414& 0.019828 \\
+			\hline
+			E(z) \pm \sqrt{D(z)}&[0.102781;&[0.175775;&[0.022204;&[0.107534;&[0.111582;\\&0.094835]&0.166489]&0.024742]&0.132582]&0.170042] \\
+			\hline
+			\widehat{E}(z) & 0.0 & 0.0 & 0.0 & 0.0 & 0.0\\
+			\hline
+			Uniform E(z) 1000& -0.001949& -0.002912& -9.6e-05& -0.000109& 0.000962  \\
+			\hline
+			Uniform D(z) 1000 & 0.001006& 0.00297& 6e-06& 0.001499& 0.001982 \\
+			\hline
+			E(z) \pm \sqrt{D(z)}&[0.033667;&[0.05741;&[0.002545;&[0.038826;&[0.043558;\\&0.029769]&0.051586]&0.002353]&0.038608]&0.045482] \\
+			\hline
+			\widehat{E}(z)  & 0.0 & 0.0 & 0.0 & 0.0 & 0.0\\
+			\hline
+		\end{tabular}
+		\caption{Равномерное распределение \eqref{uni}}
+		\label{tab:uniform}
+	\end{table}
+
+\section {Обсуждение}
+
+\noindent Исходя из данных, приведенных в таблицах, можно судить о том, что дисперсия характеристик рассеяния для распределения Коши является некой аномалией: значения слишком большие даже при увеличении размера выборки - понятно, что это результат выбросов, которые мы могли наблюдать в результатах предыдущего задания.
+
+\section {Приложение}
+\noindent Код программы GitHub URL:\\
+\newline https://github.com/workivan/mat-ver-stat
+
+\end{document}
